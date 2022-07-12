@@ -1,0 +1,61 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+flash            0x08000000         0x00020000         rw
+sram             0x20000000         0x00005000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.text           0x08000000       0xd4
+ *(.vectors*)
+ .vectors       0x08000000       0x50 startup.o
+ *(.text*)
+ .text          0x08000050       0x7c main.o
+                0x08000050                main
+ .text          0x080000cc        0x8 startup.o
+
+.data           0x080000d8     0x14d0
+ *(.data *)
+ .glue_7        0x00000000        0x0 linker stubs
+ .glue_7t       0x00000000        0x0 linker stubs
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+ .v4_bx         0x00000000        0x0 linker stubs
+ .data          0x080000d8        0x4 main.o
+                0x080000d8                R_ODR
+ .bss           0x080000dc        0x0 main.o
+ .debug_info    0x080000dc      0xa33 main.o
+ .debug_abbrev  0x08000b0f      0x1d5 main.o
+ .debug_loc     0x08000ce4       0x38 main.o
+ .debug_aranges
+                0x08000d1c       0x20 main.o
+ .debug_line    0x08000d3c      0x1f7 main.o
+ .debug_str     0x08000f33      0x4c4 main.o
+                                0x51c (size before relaxing)
+ .comment       0x080013f7       0x7b main.o
+                                 0x7c (size before relaxing)
+ *fill*         0x08001472        0x2 
+ .debug_frame   0x08001474       0x2c main.o
+ .ARM.attributes
+                0x080014a0       0x33 main.o
+ .iplt          0x00000000        0x0 main.o
+ .rel.iplt      0x00000000        0x0 main.o
+ .igot.plt      0x00000000        0x0 main.o
+ .data          0x080014d3        0x0 startup.o
+ .bss           0x080014d3        0x0 startup.o
+ .ARM.attributes
+                0x080014d3       0x21 startup.o
+ .debug_line    0x080014f4       0x3b startup.o
+ .debug_info    0x0800152f       0x3f startup.o
+ .debug_abbrev  0x0800156e       0x14 startup.o
+ *fill*         0x08001582        0x6 
+ .debug_aranges
+                0x08001588       0x20 startup.o
+
+.bss
+ *(.bss *)
+LOAD main.o
+LOAD startup.o
+OUTPUT(learn-in-depth.elf elf32-littlearm)
